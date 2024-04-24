@@ -51,6 +51,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserEntity getUser(String token) {
-        return null;
+        String userName = userToken.decodeToken(token);
+        return repository.findByName(userName);
     }
 }

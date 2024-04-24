@@ -23,7 +23,7 @@ public class UserEntity {
     String userEmail;
     @NotNull(message = "userPassword should not be null")
     String userPassword;
-    Integer userPhoneNo;
+    Long userPhoneNo;
 
     public Long getUserId() {
         return userId;
@@ -32,7 +32,7 @@ public class UserEntity {
 
     }
 
-    public UserEntity(Long userId, String userPassword, Integer userPhoneNo, String userName, String userEmail) {
+    public UserEntity(Long userId, String userPassword, Long userPhoneNo, String userName, String userEmail) {
         this.userId = userId;
         this.userPassword = userPassword;
         this.userPhoneNo = userPhoneNo;
@@ -52,7 +52,7 @@ public class UserEntity {
         return userPassword;
     }
 
-    public Integer getUserPhoneNo() {
+    public Long getUserPhoneNo() {
         return userPhoneNo;
     }
 
@@ -72,7 +72,7 @@ public class UserEntity {
         this.userPassword = userPassword;
     }
 
-    public void setUserPhoneNo(Integer userPhoneNo) {
+    public void setUserPhoneNo(Long userPhoneNo) {
         this.userPhoneNo = userPhoneNo;
     }
 }
