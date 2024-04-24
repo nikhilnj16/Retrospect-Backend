@@ -3,7 +3,9 @@ package com.backend.Retrospect.user.service;
 import com.backend.Retrospect.user.DTO.UserLoginDTO;
 import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
+import com.backend.Retrospect.user.utility.UserToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -11,17 +13,40 @@ import java.util.HashMap;
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
-    private IUserRepository repository;
+    IUserRepository repository;
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    UserToken userToken;
 
     @Override
     public HashMap<String, String> userRegistration(UserEntity userEntity) {
-        return null;
+
+        String encodePassword = passwordEncoder.encode(userEntity.getUserPassword());
+        userEntity.setUserPassword(encodePassword);
+        repository.save(userEntity);
+
+        HashMap<String, String> response = new HashMap<>();
+        response.put("Status" , "OK");
+        return response;
     }
 
     @Override
     public HashMap<String, String> userLogin(UserLoginDTO userLoginDto) {
-        return null;
+        UserEntity userEntity = repository.findByEmail(userLoginDto.getUserEmail());
+        if(userEntity != null && passwordEncoder.matches(userLoginDto.getUserPassword(), userEntity.getUserPassword())) {
+            String token = userToken.createToken(userEntity.getUserName());
+            repository.save(userEntity);
+            HashMap<String, String> response = new HashMap<>();
+            response.put("Status" , "OK");
+            response.put("token", token);
+            return response;
+
+        } else {
+            return null;
+        }
+
     }
 
     @Override
