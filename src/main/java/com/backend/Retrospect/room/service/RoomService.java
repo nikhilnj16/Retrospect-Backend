@@ -21,4 +21,35 @@ public class RoomService implements IRoomService {
         roomrepo.save(roomEntity);
         return getAllRooms();
     }
+
+    @Override
+    public RoomEntity getRoomById(int id) {
+        return roomrepo.findById(id).orElseThrow(()->new IllegalArgumentException("Room Not Found"));
+    }
+
+    @Override
+    public String editRoomById(int id,RoomEntity roomEntity) {
+        RoomEntity updateDetails = roomrepo.findById(id).orElseThrow(()->new IllegalArgumentException("Room Not Found"));
+        updateDetails.setRoomName(roomEntity.getRoomName());
+        updateDetails.setRoomCreator(roomEntity.getRoomCreator());
+        updateDetails.setRoomDescription(roomEntity.getRoomDescription());
+        updateDetails.setActive(roomEntity.getActive());
+        updateDetails.setStartDate(roomEntity.getStartDate());
+        updateDetails.setEndDate(roomEntity.getEndDate());
+        roomrepo.save(updateDetails);
+        return "Room Detail Updated";
+    }
+
+    public String deleteRoomById(int id) {
+        if(roomrepo.existsById(id))
+        {
+            roomrepo.deleteById(id);
+            return "Room Deleted .";
+        }
+
+        else
+            return "Room Not Found with :" + id;
+    }
+
+
 }
