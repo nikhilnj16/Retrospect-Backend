@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
