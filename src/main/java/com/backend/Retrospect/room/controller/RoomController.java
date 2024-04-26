@@ -24,15 +24,16 @@ public class RoomController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public List<RoomEntity> createRoom(@RequestBody RoomEntity roomEntity){
+        System.out.println(roomEntity);
         return roomService.createroom(roomEntity);
     }
 
-    @GetMapping("/getRoomById")
+    @GetMapping("/getRoomById/{id}")
     public RoomEntity getRoomById(@PathVariable int id){
         return roomService.getRoomById(id);
     }
 
-    @PutMapping("editroom/{id}")
+    @PutMapping("edit/{id}")
     public String editRoomById (@PathVariable int id, RoomEntity roomEntity)
     {
         return roomService.editRoomById(id,roomEntity);
