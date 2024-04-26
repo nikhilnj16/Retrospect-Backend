@@ -1,44 +1,43 @@
 package com.backend.Retrospect.room.entity;
 
-import com.backend.Retrospect.room.controller.RoomController;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 
 @ToString
-
 @Entity
 @Table(name="room")
 public class RoomEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer roomId;
+    @GeneratedValue
+    public Integer roomId;
     @NotNull(message = "userName should not be null")
     @Size(message = "Enter userName between 3 to 100 chars")
-    String roomName;
+    private String roomName;
     @NotNull(message = "roomCreator should not be null")
-    String roomCreator;
+    private String roomCreator;
     @DateTimeFormat(pattern = "dd/mm/yyyy")
-    LocalDate startDate;
+     private Date startDate;
     @DateTimeFormat(pattern = "dd/mm/yyyy")
-    LocalDate endDate;
+    private Date endDate;
+    private boolean active;
 
-    Boolean Active;
     @Size(message = "Enter notes between 3 to 100 chars")
     String roomDescription;
 
-    public RoomEntity(Integer roomId, String roomName, String roomCreator, LocalDate startDate, LocalDate endDate, Boolean active, String roomDescription) {
+    public RoomEntity(Integer roomId, String roomName, String roomCreator, Date startDate, Date endDate, boolean active, String roomDescription) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomCreator = roomCreator;
         this.startDate = startDate;
         this.endDate = endDate;
-        Active = active;
+        this.active = active;
         this.roomDescription = roomDescription;
     }
 
@@ -70,28 +69,28 @@ public class RoomEntity {
         this.roomCreator = roomCreator;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
     public Boolean getActive() {
-        return Active;
+        return active;
     }
 
     public void setActive(Boolean active) {
-        Active = active;
+        active = active;
     }
 
     public String getRoomDescription() {
