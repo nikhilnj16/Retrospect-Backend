@@ -22,7 +22,7 @@ public class RoomEntity {
     @GeneratedValue
     public Long roomId;
     @NotNull(message = "userName should not be null")
-    @Size(message = "Enter userName between 3 to 100 chars")
+//    @Size(message = "Enter userName between 3 to 100 chars")
     private String roomName;
     @NotNull(message = "roomCreator should not be null")
     private String roomCreator;
@@ -31,7 +31,7 @@ public class RoomEntity {
     @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Date endDate;
     private boolean active;
-    @Size(message = "Enter notes between 3 to 100 chars")
+//    @Size(message = "Enter notes between 3 to 100 chars")
     private String roomDescription;
 
 }
