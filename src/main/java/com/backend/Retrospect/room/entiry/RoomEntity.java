@@ -1,14 +1,16 @@
 package com.backend.Retrospect.room.entiry;
 
 
+import com.backend.Retrospect.topic.entity.TopicEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 
 
 @Entity
@@ -33,5 +35,16 @@ public class RoomEntity {
     private boolean active;
     @Size(message = "Enter notes between 3 to 100 chars")
     private String roomDescription;
+
+
+    @ElementCollection
+    private List<String> topicList;
+
+
+
+
+
+
+
 
 }

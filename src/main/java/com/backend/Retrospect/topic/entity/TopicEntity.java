@@ -1,5 +1,6 @@
 package com.backend.Retrospect.topic.entity;
 
+import com.backend.Retrospect.room.entiry.RoomEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +10,7 @@ public class TopicEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long topicId;
     String topicName;
+
 
     public long getTopicId() {
         return topicId;

@@ -7,8 +7,9 @@ import java.util.List;
 
 public interface IRoomService {
     List<RoomEntity> getAllRooms();
-    List<RoomEntity> createRoom(RoomEntity roomEntity);
+    String createRoom(RoomEntity roomEntity);
     RoomEntity getRoomById(Long id);
-    String editRoomById(Long id,RoomEntity roomEntity);
-    String deleteRoomById(Long id);
+    RoomEntity  editRoomById(Long id,RoomEntity roomEntity);
+    void removeRoom(Long id);
+
 }
