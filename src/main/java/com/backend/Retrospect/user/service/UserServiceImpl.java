@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
@@ -37,10 +36,12 @@ public class UserServiceImpl implements IUserService {
         UserEntity userEntity = repository.findByEmail(userLoginDto.getUserEmail());
         if(userEntity != null && passwordEncoder.matches(userLoginDto.getUserPassword(), userEntity.getUserPassword())) {
             String token = userToken.createToken(userEntity.getUserName());
+            String userEmail = userEntity.getUserEmail();
             repository.save(userEntity);
             HashMap<String, String> response = new HashMap<>();
             response.put("Status" , "OK");
             response.put("token", token);
+            response.put("userEmail",userEmail);
             return response;
 
         } else {

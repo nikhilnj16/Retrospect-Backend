@@ -6,6 +6,7 @@ import com.backend.Retrospect.room.repository.IRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -21,23 +22,25 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public List<RoomEntity> createRoom(RoomEntity roomEntity) {
+    public HashMap<String,String> createRoom(RoomEntity roomEntity) {
         repoRoom.save(roomEntity);
-        return repoRoom.findAll();
-    }
-
-    @Override
-    public RoomEntity getRoomById(Long id) {
-        return null;
+        HashMap<String,String> map = new HashMap<>();
+        map.put("status","successfully crested room");
+        return map;
     }
 
     @Override
     public String editRoomById(Long id, RoomEntity roomEntity) {
-        return "";
+        return null;
+
     }
 
     @Override
-    public String deleteRoomById(Long id) {
-        return "";
+    public HashMap<String ,String> deleteRoomById(Long id) {
+        repoRoom.deleteById(id);
+        HashMap<String ,String> map = new HashMap<>();
+        map.put("id",String.valueOf(id));
+        map.put("status","deleted");
+        return map;
     }
 }

@@ -6,6 +6,7 @@ import com.backend.Retrospect.room.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,21 @@ public class RoomController {
          return iRoomService.getAllRooms();
     }
     @PostMapping("/add")
-    public List<RoomEntity> setRoom(@RequestBody RoomEntity roomEntity){
+    public HashMap<String, String> setRoom(@RequestBody RoomEntity roomEntity){
         return iRoomService.createRoom(roomEntity);
+    }
+
+
+    @PutMapping("edit/room")
+    public void EditRoom(RoomEntity roomEntity){
+        return;
+
+    }
+
+    @DeleteMapping("/deleteRoom/{roomId}")
+    public HashMap<String,String> deleteRoom( @PathVariable Long roomId){
+        return iRoomService.deleteRoomById(roomId);
+
     }
 
 

@@ -26,10 +26,10 @@ public class RoomEntity {
     private String roomName;
     @NotNull(message = "roomCreator should not be null")
     private String roomCreator;
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
-    private Date startDate;
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
-    private Date endDate;
+
+    private String startDate;
+
+    private String endDate;
     private boolean active;
 //    @Size(message = "Enter notes between 3 to 100 chars")
     private String roomDescription;
