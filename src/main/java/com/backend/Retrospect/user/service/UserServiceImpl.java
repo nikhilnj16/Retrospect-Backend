@@ -42,6 +42,7 @@ public class UserServiceImpl implements IUserService {
             response.put("Status" , "OK");
             response.put("token", token);
             response.put("userEmail",userEmail);
+            response.put("userName",userEntity.getUserName());
             return response;
 
         } else {
