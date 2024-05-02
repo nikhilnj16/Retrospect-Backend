@@ -1,10 +1,14 @@
 package com.backend.Retrospect.room.service;
 
 
-import com.backend.Retrospect.room.entiry.RoomEntity;
+import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.repository.IRoomRepository;
+import com.backend.Retrospect.user.entity.UserEntity;
+import com.backend.Retrospect.user.repository.IUserRepository;
+import com.backend.Retrospect.user.utility.UserToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +19,24 @@ public class RoomService implements IRoomService {
     @Autowired
     private IRoomRepository repoRoom;
 
+    @Autowired
+    private IUserRepository repoUser;
+
+    @Autowired
+    private UserToken userToken;
+
 
     @Override
-    public List<RoomEntity> getAllRooms() {
-        return repoRoom.findAll();
+    public List<RoomEntity> getAllRooms(@RequestHeader String token) {
+        String username = userToken.decodeToken(token);
+        UserEntity userEntity = repoUser.findByName(username);
+        if(userEntity != null){
+            return repoRoom.findAll();
+        }
+        else{
+            return null;
+        }
+
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.backend.Retrospect.room.controller;
 
 
-import com.backend.Retrospect.room.entiry.RoomEntity;
+import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +17,8 @@ public class RoomController {
     IRoomService iRoomService;
 
     @GetMapping("/get")
-    public List<RoomEntity> getRooms(){
-         return iRoomService.getAllRooms();
+    public List<RoomEntity> getRooms(@RequestHeader String token){
+         return iRoomService.getAllRooms(token);
     }
     @PostMapping("/add")
     public HashMap<String, String> setRoom(@RequestBody RoomEntity roomEntity){
