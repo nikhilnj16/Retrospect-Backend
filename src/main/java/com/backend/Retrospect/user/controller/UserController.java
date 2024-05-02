@@ -1,6 +1,8 @@
 package com.backend.Retrospect.user.controller;
 
+import com.backend.Retrospect.user.DTO.UserDetailsChangeDTO;
 import com.backend.Retrospect.user.DTO.UserLoginDTO;
+import com.backend.Retrospect.user.DTO.UserPasswordChangeDTO;
 import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,18 @@ public class UserController {
     @GetMapping("/getUserByToken")
     public UserEntity getUser(@RequestHeader String token){
         return service.getUser(token);
+    }
+
+    @PutMapping("/changeEmail")
+    public HashMap<String, String> changeEmail(@RequestBody UserDetailsChangeDTO userDetailsChangeDTO, @RequestHeader String token)
+    {
+        return service.changeEmail(userDetailsChangeDTO, token);
+    }
+
+    @PutMapping("/changePassword")
+    public HashMap<String, String> changePassword(@RequestBody UserPasswordChangeDTO userPasswordChangeDTO, @RequestHeader String token)
+    {
+        return service.changePassword(userPasswordChangeDTO, token);
     }
 
 
