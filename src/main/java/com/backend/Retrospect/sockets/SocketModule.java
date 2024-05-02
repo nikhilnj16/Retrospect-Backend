@@ -2,6 +2,7 @@ package com.backend.Retrospect.sockets;
 
 import com.backend.Retrospect.sockets.constants.Constants;
 import com.backend.Retrospect.sockets.entiry.Message;
+import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -34,7 +35,7 @@ public class SocketModule {
 
     private DataListener<Message> onChatReceived() {
         return (senderClient, data, ackSender) -> {
-            log.info("Received message from client {}: {}", senderClient.getSessionId(), data.getContent());
+            log.info("Received message from client {}: {} : {}", senderClient.getSessionId(), data.getContent() ,data.getContentType());
             socketService.saveMessage(senderClient, data);
             // Handle sending the message to other clients
             server.getRoomOperations(data.getRoom()).sendEvent("receive_message", data);

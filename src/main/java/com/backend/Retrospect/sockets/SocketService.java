@@ -1,7 +1,6 @@
 package com.backend.Retrospect.sockets;
 
 import com.backend.Retrospect.sockets.entiry.Message;
-import com.backend.Retrospect.sockets.entiry.MessageType;
 import com.backend.Retrospect.sockets.service.MessageService;
 import com.corundumstudio.socketio.SocketIOClient;
 
@@ -22,15 +21,14 @@ public class SocketService {
         for (
                 SocketIOClient client : senderClient.getNamespace().getRoomOperations(room).getClients()) {
             if (!client.getSessionId().equals(senderClient.getSessionId())) {
-                client.sendEvent("read_message",
-                        message);
+                client.sendEvent("read_message", message);
             }
         }
     }
 
     public void saveMessage(SocketIOClient senderClient, Message message) {
         Message storedMessage = messageService.saveMessage(Message.builder()
-                .messageType(MessageType.CLIENT)
+                .messageType(message.getMessageType())
                 .content(message.getContent())
                 .room(message.getRoom())
                 .username(message.getUsername())
@@ -38,9 +36,8 @@ public class SocketService {
         sendSocketMessage(senderClient, storedMessage, message.getRoom());
     }
 
-    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username) {
+    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ) {
         Message storedMessage = messageService.saveMessage(Message.builder()
-                .messageType(MessageType.SERVER)
                 .content(message)
                 .room(room)
                 .username(username)

@@ -21,8 +21,8 @@ public class Message extends BaseModel {
 
     @Enumerated(EnumType.STRING)
     private MessageType messageType;
-
     private String content;
+    private String contentType;
     private String room;
     private String username;
 
