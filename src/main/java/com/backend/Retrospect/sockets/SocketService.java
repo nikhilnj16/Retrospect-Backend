@@ -31,15 +31,17 @@ public class SocketService {
                 .messageType(message.getMessageType())
                 .content(message.getContent())
                 .room(message.getRoom())
+                .contentType(message.getContentType())
                 .username(message.getUsername())
                 .build());
         sendSocketMessage(senderClient, storedMessage, message.getRoom());
     }
 
-    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ) {
+    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType ) {
         Message storedMessage = messageService.saveMessage(Message.builder()
                 .content(message)
                 .room(room)
+                .contentType(contentType)
                 .username(username)
                 .build());
         sendSocketMessage(senderClient, storedMessage, room);
