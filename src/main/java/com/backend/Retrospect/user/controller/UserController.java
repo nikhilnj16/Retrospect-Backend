@@ -57,11 +57,13 @@ public class UserController {
     }
 
     @PostMapping("/sendEmail")
-    public ResponseEntity<String> sendAllEmail(@RequestBody UserEmailDTO userEmailDTO, @RequestHeader String link)
+    public HashMap<String, String> sendAllEmail(@RequestBody UserEmailDTO userEmailDTO, @RequestHeader String link)
     {
 
         service.sendEmailToAllUsers(userEmailDTO,link);
-        return ResponseEntity.ok("Email has sent successfully");
+        HashMap<String, String> response = new HashMap<>();
+        response.put("Status" , "OK");
+        return response;
     }
 
 
