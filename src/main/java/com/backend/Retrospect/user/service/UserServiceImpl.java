@@ -1,17 +1,21 @@
 package com.backend.Retrospect.user.service;
 
 import com.backend.Retrospect.user.DTO.UserDetailsChangeDTO;
+import com.backend.Retrospect.user.DTO.UserEmailDTO;
 import com.backend.Retrospect.user.DTO.UserLoginDTO;
 import com.backend.Retrospect.user.DTO.UserPasswordChangeDTO;
 import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
+import com.backend.Retrospect.user.utility.EmailSender;
 import com.backend.Retrospect.user.utility.UserToken;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -23,6 +27,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     UserToken userToken;
+
+    @Autowired
+    EmailSender emailSender;
 
     @Override
     public HashMap<String, String> userRegistration(UserEntity userEntity) {
@@ -102,4 +109,44 @@ public class UserServiceImpl implements IUserService {
         return response;
 
     }
+
+
+    @Override
+    public ResponseEntity<List<String>> getAllEmailId() {
+
+        List<String> emails=repository.findALLEmail();
+        return ResponseEntity.ok(emails);
+
+
+    }
+
+
+    public void sendEmailToAllUsers(UserEmailDTO userEmailDTO, String link)
+    {
+        UserEntity userEntity = repository.findByEmail(userEmailDTO.getUserEmail());
+
+        if(userEntity==null)
+        {
+            System.out.println("Email id is not present");
+        }
+        String subject="Report is added";
+        String body="The mail is sent to"+link;
+        emailSender.sendEmail(userEmailDTO.getUserEmail(),subject,body);
+
+    }
+
+
+    public boolean authenticate(String oldpassword, String password) {
+
+        return passwordEncoder.matches(password, oldpassword);
+
+    }
+
+
+
+
+
+
+
+
 }
