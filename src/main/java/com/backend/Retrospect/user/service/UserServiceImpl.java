@@ -129,8 +129,8 @@ public class UserServiceImpl implements IUserService {
         {
             System.out.println("Email id is not present");
         }
-        String subject="Report is added";
-        String body="The mail is sent to"+link;
+        String subject="Room invitation";
+        String body="Please join chat room using the link!!!!  "  + "http://localhost:4200" + link;
         emailSender.sendEmail(userEmailDTO.getUserEmail(),subject,body);
 
     }
