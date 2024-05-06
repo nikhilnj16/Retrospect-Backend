@@ -129,8 +129,14 @@ public class UserServiceImpl implements IUserService {
         {
             System.out.println("Email id is not present");
         }
-        String subject="Room invitation";
-        String body="Please join chat room using the link!!!!  "  + "http://localhost:4200" + link;
+        String subject = "Invitation to Join Our Chat Room";
+        String body = "Dear" + userEntity.getUserName() + "\n\n"
+                + "We would like to invite you to join our chat room discussion. Click on the link below to access the chat room:\n\n"
+                + "[Chat Room Link]: http://localhost:4200" + link + "\n\n"
+                + "We look forward to having you join us for an engaging conversation!\n\n"
+                + "Best regards,\n"
+                + "Retrospect";
+
         emailSender.sendEmail(userEmailDTO.getUserEmail(),subject,body);
 
     }
