@@ -22,9 +22,6 @@ public class RoomEntity {
     @NotNull(message = "roomCreator should not be null")
     private String roomCreator;
 
-    private String startDate;
-
-    private String endDate;
     private boolean active;
 //    @Size(message = "Enter notes between 3 to 100 chars")
     private String roomDescription;
