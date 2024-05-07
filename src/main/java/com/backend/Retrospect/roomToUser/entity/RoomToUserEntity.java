@@ -20,13 +20,5 @@ public class RoomToUserEntity {
     @EmbeddedId
     private RoomToUserId id;
 
-    @ManyToOne
-    @MapsId("roomId")
-    @JoinColumn(name = "RoomId")
-    private RoomEntity roomEntity;
 
-    @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "UserId")
-    private UserEntity userEntity;
 }
