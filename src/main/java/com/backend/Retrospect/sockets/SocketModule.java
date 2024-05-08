@@ -61,41 +61,45 @@ public class SocketModule {
 
     private ConnectListener onConnected() {
         return (client) -> {
-//            String room = client.getHandshakeData().getSingleUrlParam("room");
-//            String username = client.getHandshakeData().getSingleUrlParam("room");
-            var params = client.getHandshakeData().getUrlParams();
-            String room = String.join("", params.get("room"));
-            String username = String.join("", params.get("username"));
-            Optional<RoomEntity> roomEntityOptional = roomRepository.findById(Long.valueOf(room));
-            UserEntity userEntity = userRepository.findByName(username);
+            try {
+                var params = client.getHandshakeData().getUrlParams();
+                String room = String.join("", params.get("room"));
+                String username = String.join("", params.get("username"));
+                Optional<RoomEntity> roomEntityOptional = roomRepository.findById(Long.valueOf(room));
+                UserEntity userEntity = userRepository.findByName(username);
 
-            if (roomEntityOptional.isPresent() && userEntity != null) {
-                RoomEntity roomEntity = roomEntityOptional.get();
-                LocalDate timeStamp = LocalDate.now(); // Example LocalDate
+                if (roomEntityOptional.isPresent() && userEntity != null) {
+                    RoomEntity roomEntity = roomEntityOptional.get();
+                    LocalDate timeStamp = LocalDate.now(); // Example LocalDate
 
-                // Define the format you want for your string representation
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    // Define the format you want for your string representation
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-                // Convert the LocalDate to a string using the defined format
-                String timeStampString = timeStamp.format(formatter);
-                RoomToUserId roomToUserId = new RoomToUserId(roomEntity, userEntity, timeStampString);
+                    // Convert the LocalDate to a string using the defined format
+                    String timeStampString = timeStamp.format(formatter);
+                    RoomToUserId roomToUserId = new RoomToUserId(roomEntity, userEntity, timeStampString);
 
-                RoomToUserEntity roomToUserEntity = new RoomToUserEntity();
-                if (!roomToUserRepository.existsById(roomToUserId)) {
-                    roomToUserEntity.setId(roomToUserId);
-                    roomToUserRepository.save(roomToUserEntity);
+                    RoomToUserEntity roomToUserEntity = new RoomToUserEntity();
+                    if (!roomToUserRepository.existsById(roomToUserId)) {
+                        roomToUserEntity.setId(roomToUserId);
+                        roomToUserRepository.save(roomToUserEntity);
+                    } else {
+                        System.out.println("already there");
+                    }
+                    String contentType = "connected";
+                    client.joinRoom(room);
+                    socketService.saveInfoMessage(client, String.format(Constants.WELCOME_MESSAGE, username), room, username, contentType);
+                    log.info("Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), room, username);
+                } else {
+                    log.error("Room or User not found");
                 }
-                String contentType = "connected";
-                client.joinRoom(room);
-                socketService.saveInfoMessage(client, String.format(Constants.WELCOME_MESSAGE, username), room ,username , contentType );
-                log.info("Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), room, username);
-            } else{
-                log.error("Room or User not found");
+            } catch (Exception e) {
+                log.error("An error occurred while processing the connection request: {}", e.getMessage());
+                // Handle the exception or log it accordingly
             }
-
         };
-
     }
+
 
     private DisconnectListener onDisconnected() {
         return client -> {
