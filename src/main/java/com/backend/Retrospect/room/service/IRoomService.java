@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IRoomService {
     List<RoomEntity> getAllRooms(@RequestHeader String token);
-    HashMap<String ,String > createRoom(RoomEntity roomEntity);
+    HashMap<String ,String > createRoom(RoomEntity roomEntity , long id);
     String editRoomById(Long id,RoomEntity roomEntity);
     HashMap<String ,String> deleteRoomById(Long id);
 }

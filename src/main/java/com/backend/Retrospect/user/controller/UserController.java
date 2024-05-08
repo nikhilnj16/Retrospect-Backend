@@ -8,11 +8,11 @@ import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -64,6 +64,11 @@ public class UserController {
         HashMap<String, String> response = new HashMap<>();
         response.put("Status" , "OK");
         return response;
+    }
+
+
+    public Optional<UserEntity> getUserById(@PathVariable Long id){
+        return service.getUser(id);
     }
 
 

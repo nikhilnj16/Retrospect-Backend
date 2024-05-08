@@ -20,9 +20,9 @@ public class RoomController {
     public List<RoomEntity> getRooms(@RequestHeader String token){
          return iRoomService.getAllRooms(token);
     }
-    @PostMapping("/add")
-    public HashMap<String, String> setRoom(@RequestBody RoomEntity roomEntity){
-        return iRoomService.createRoom(roomEntity);
+    @PostMapping("/add/{id}")
+    public HashMap<String, String> setRoom(@RequestBody RoomEntity roomEntity ,@PathVariable long id){
+        return iRoomService.createRoom(roomEntity ,id);
     }
 
 

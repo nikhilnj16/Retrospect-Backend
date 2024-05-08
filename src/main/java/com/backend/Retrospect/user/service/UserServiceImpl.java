@@ -8,7 +8,6 @@ import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
 import com.backend.Retrospect.user.utility.EmailSender;
 import com.backend.Retrospect.user.utility.UserToken;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -69,6 +68,11 @@ public class UserServiceImpl implements IUserService {
     public UserEntity getUser(String token) {
         String userName = userToken.decodeToken(token);
         return repository.findByName(userName);
+    }
+
+    @Override
+    public Optional<UserEntity> getUser(long id) {
+        return  repository.findById(id );
     }
 
     @Override

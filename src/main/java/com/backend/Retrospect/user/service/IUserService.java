@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
     HashMap<String, String> userRegistration(UserEntity userEntity);
@@ -16,6 +17,7 @@ public interface IUserService {
     HashMap<String, String> userLogin(UserLoginDTO userLoginDto);
 
     UserEntity getUser(String token);
+    Optional<UserEntity> getUser(long id);
 
     HashMap<String, String> changeEmail(UserDetailsChangeDTO userDetailsChangeDTO, String token);
 
