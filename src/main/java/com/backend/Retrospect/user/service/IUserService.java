@@ -17,6 +17,7 @@ public interface IUserService {
     HashMap<String, String> userLogin(UserLoginDTO userLoginDto);
 
     UserEntity getUser(String token);
+
     Optional<UserEntity> getUser(long id);
 
     HashMap<String, String> changeEmail(UserDetailsChangeDTO userDetailsChangeDTO, String token);

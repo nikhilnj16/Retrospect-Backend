@@ -35,6 +35,7 @@ public class UserEntity {
     @NotNull(message = "userPassword should not be null")
     private String userPassword;
 
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<RoomEntity> createdRooms = new ArrayList<>();

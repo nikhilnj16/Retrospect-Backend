@@ -72,7 +72,7 @@ public class RoomService implements IRoomService {
         RoomEntity roomEntity = new RoomEntity();
 
         // Retrieve the UserEntity from the Optional
-        Optional<UserEntity> userEntityOptional = repoUser.findById(createRoomDTO.getUser());
+        Optional<UserEntity> userEntityOptional = repoUser.findById(Long.valueOf(createRoomDTO.getUser()));
         if (userEntityOptional.isPresent()) {
             UserEntity userEntity = userEntityOptional.get();
 

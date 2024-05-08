@@ -9,7 +9,7 @@ import lombok.*;
 public class CreateRoomDTO {
 
     private String roomName;
-    private long user;
+    private String user;
     private boolean active;
     private String roomDescription;
 }

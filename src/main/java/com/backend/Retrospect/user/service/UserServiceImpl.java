@@ -55,6 +55,7 @@ public class UserServiceImpl implements IUserService {
             response.put("token", token);
             response.put("userEmail",userEmail);
             response.put("userName",userEntity.getUserName());
+            response.put("userId", String.valueOf(userEntity.getUserId()));
             return response;
 
         } else {
