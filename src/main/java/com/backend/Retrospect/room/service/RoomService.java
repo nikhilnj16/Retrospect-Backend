@@ -1,6 +1,7 @@
 package com.backend.Retrospect.room.service;
 
 
+import com.backend.Retrospect.room.dto.CreateRoomDTO;
 import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.repository.IRoomRepository;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoomService implements IRoomService {
@@ -48,39 +50,7 @@ public class RoomService implements IRoomService {
     }
 
 
-    @Override
-    public HashMap<String,String> createRoom(RoomEntity roomEntity , long id) {
-        repoRoom.save(roomEntity);
 
-        UserEntity userEntity = repoUser.findById(id).orElse(null);
-
-        if (userEntity == null) {
-            // Handle the case where the user is not found
-            HashMap<String,String> map = new HashMap<>();
-            map.put("status","User not found");
-            return map;
-        }
-
-        RoomToUserId roomToUserId = new RoomToUserId();
-        roomToUserId.setRoomEntity(roomEntity);
-        roomToUserId.setUserEntity(userEntity);
-
-        // Set the current date and time
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = currentDateTime.format(formatter);
-        roomToUserId.setTimeStamp(formattedDateTime);
-
-        RoomToUserEntity roomToUserEntity = new RoomToUserEntity();
-        roomToUserEntity.setId(roomToUserId);
-
-        roomToUserRepository.save(roomToUserEntity);
-
-        HashMap<String,String> map = new HashMap<>();
-        map.put("status","successfully created room");
-
-        return map;
-    }
 
     @Override
     public String editRoomById(Long id, RoomEntity roomEntity) {
@@ -96,4 +66,39 @@ public class RoomService implements IRoomService {
         map.put("status","deleted");
         return map;
     }
+
+    @Override
+    public HashMap<String, String> create(CreateRoomDTO createRoomDTO) {
+        RoomEntity roomEntity = new RoomEntity();
+
+        // Retrieve the UserEntity from the Optional
+        Optional<UserEntity> userEntityOptional = repoUser.findById(createRoomDTO.getUser());
+        if (userEntityOptional.isPresent()) {
+            UserEntity userEntity = userEntityOptional.get();
+
+            // Set room name, description, and active status from the DTO
+            roomEntity.setRoomName(createRoomDTO.getRoomName());
+            roomEntity.setRoomDescription(createRoomDTO.getRoomDescription());
+            roomEntity.setActive(createRoomDTO.isActive());
+            // Set room active status (you can uncomment this line if you have a way to determine the active status)
+            // roomEntity.setActive(createRoomDTO.isActive());
+
+            // Set the user entity to the room entity
+            roomEntity.setUser(userEntity);
+
+            // Save the room entity
+            repoRoom.save(roomEntity);
+
+            // Return a success message
+            HashMap<String,String> map = new HashMap<>();
+            map.put("status", "successfully created");
+            return map;
+        } else {
+            // Handle the case where the user with the specified ID is not found
+            HashMap<String,String> map = new HashMap<>();
+            map.put("status", "failed to create room: user not found");
+            return map;
+        }
+    }
+
 }

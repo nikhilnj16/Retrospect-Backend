@@ -1,6 +1,7 @@
 package com.backend.Retrospect.room.entity;
 
 
+import com.backend.Retrospect.user.entity.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -11,19 +12,19 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="room")
+@Table(name = "room")
 public class RoomEntity {
     @Id
-    @GeneratedValue
-    public Long roomId;
-    @NotNull(message = "userName should not be null")
-//    @Size(message = "Enter userName between 3 to 100 chars")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long roomId;
+
+    @NotNull(message = "roomName should not be null")
     private String roomName;
-    @NotNull(message = "roomCreator should not be null")
-    private String roomCreator;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     private boolean active;
-//    @Size(message = "Enter notes between 3 to 100 chars")
     private String roomDescription;
-
 }
