@@ -16,8 +16,10 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -61,41 +63,54 @@ public class SocketModule {
 
     private ConnectListener onConnected() {
         return (client) -> {
-//            String room = client.getHandshakeData().getSingleUrlParam("room");
-//            String username = client.getHandshakeData().getSingleUrlParam("room");
             var params = client.getHandshakeData().getUrlParams();
             String room = String.join("", params.get("room"));
             String username = String.join("", params.get("username"));
-            Optional<RoomEntity> roomEntityOptional = roomRepository.findById(Long.valueOf(room));
-            UserEntity userEntity = userRepository.findByName(username);
 
-            if (roomEntityOptional.isPresent() && userEntity != null) {
-                RoomEntity roomEntity = roomEntityOptional.get();
-                LocalDate timeStamp = LocalDate.now(); // Example LocalDate
+            try {
+                Optional<RoomEntity> roomEntityOptional = roomRepository.findById(Long.valueOf(room));
+                UserEntity userEntity = userRepository.findByName(username);
 
-                // Define the format you want for your string representation
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                if (roomEntityOptional.isPresent() && userEntity != null) {
+                    RoomEntity roomEntity = roomEntityOptional.get();
+                    LocalDate timeStamp = LocalDate.now(); // Example LocalDate
 
-                // Convert the LocalDate to a string using the defined format
-                String timeStampString = timeStamp.format(formatter);
-                RoomToUserId roomToUserId = new RoomToUserId(roomEntity, userEntity, timeStampString);
+                    // Define the format you want for your string representation
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-                RoomToUserEntity roomToUserEntity = new RoomToUserEntity();
-                if (!roomToUserRepository.existsById(roomToUserId)) {
-                    roomToUserEntity.setId(roomToUserId);
-                    roomToUserRepository.save(roomToUserEntity);
+                    // Convert the LocalDate to a string using the defined format
+                    String timeStampString = timeStamp.format(formatter);
+                    RoomToUserId roomToUserId = new RoomToUserId(roomEntity, userEntity, timeStampString);
+
+                    if (!roomToUserRepository.existsById(roomToUserId)) {
+                        RoomToUserEntity roomToUserEntity = new RoomToUserEntity();
+                        roomToUserEntity.setId(roomToUserId);
+                        roomToUserRepository.save(roomToUserEntity);
+
+                        String contentType = "connected";
+                        client.joinRoom(room);
+                        socketService.saveInfoMessage(client, String.format(Constants.WELCOME_MESSAGE, username), room, username, contentType);
+                        log.info("Socket ID[{}] - room[{}] - username [{}]  Connected to chat module", client.getSessionId().toString(), room, username);
+                    } else {
+                        log.warn("Room already exists for user [{}] in room [{}]", username, room);
+                        // Handle case where room already exists for user
+                    }
+                } else {
+                    log.error("Room or User not found");
+                    // Handle case where room or user not found
                 }
-                String contentType = "connected";
-                client.joinRoom(room);
-                socketService.saveInfoMessage(client, String.format(Constants.WELCOME_MESSAGE, username), room ,username , contentType );
-                log.info("Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), room, username);
-            } else{
-                log.error("Room or User not found");
+            } catch (DataIntegrityViolationException e) {
+                log.error("Data integrity violation: {}", e.getMessage());
+                // Handle data integrity violation exception
+            } catch (Exception e) {
+                log.error("An error occurred: {}", e.getMessage());
+                // Handle other exceptions
             }
-
         };
-
     }
+
+
+
 
     private DisconnectListener onDisconnected() {
         return client -> {
