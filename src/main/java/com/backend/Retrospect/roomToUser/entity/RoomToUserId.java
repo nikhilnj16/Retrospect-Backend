@@ -5,7 +5,6 @@ import com.backend.Retrospect.user.entity.UserEntity;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +27,6 @@ public class RoomToUserId implements Serializable {
     private UserEntity userEntity;
 
     private String timeStamp;
+
+
 }
