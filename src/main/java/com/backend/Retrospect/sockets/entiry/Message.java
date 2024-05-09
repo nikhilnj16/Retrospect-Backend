@@ -1,21 +1,14 @@
 package com.backend.Retrospect.sockets.entiry;
 
-import com.backend.Retrospect.sockets.entiry.BaseModel;
-import com.backend.Retrospect.sockets.entiry.MessageType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import jakarta.persistence.*;
+import lombok.*;
 
 
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
 public class Message extends BaseModel {
 

@@ -24,10 +24,10 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getMessages(room));
     }
 
-    @GetMapping("/analysisMessage/{room}")
-    public ResponseEntity<HashMap<String ,Integer>> analysisMessages(@PathVariable String room){
-        return ResponseEntity.ok(messageService.analysisMessages(room));
-    }
+//    @GetMapping("/analysisMessage/{room}")
+//    public ResponseEntity<HashMap<String ,Integer>> analysisMessages(@PathVariable String room){
+//        return ResponseEntity.ok(messageService.analysisMessages(room));
+//    }
 
 
 }

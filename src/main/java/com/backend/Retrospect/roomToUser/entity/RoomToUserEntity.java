@@ -19,6 +19,4 @@ public class RoomToUserEntity {
 
     @EmbeddedId
     private RoomToUserId id;
-
-
 }

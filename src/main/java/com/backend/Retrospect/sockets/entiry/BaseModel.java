@@ -1,5 +1,6 @@
 package com.backend.Retrospect.sockets.entiry;
 
+import com.backend.Retrospect.roomToUser.entity.RoomToUserId;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,6 +19,5 @@ public abstract class BaseModel {
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date createdDateTime;
-
-
+    
 }

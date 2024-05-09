@@ -26,25 +26,25 @@ public class MessageService {
         return messageRepository.save(message);
     }
 
-    public HashMap<String, Integer> analysisMessages(String room) {
-        HashMap<String, Integer> analysis = new HashMap<>();
-        List<Message> messageList = messageRepository.findAllByRoom(room);
-
-        for (Message message : messageList) {
-            String contentType = message.getContentType();
-
-            // Check if the content type is already present in the analysis map
-            if (analysis.containsKey(contentType)) {
-                // If it is, increment the count by 1
-                analysis.put(contentType, analysis.get(contentType) + 1);
-            } else {
-                // If it's not present, add it to the map with count as 1
-                analysis.put(contentType, 1);
-            }
-        }
-
-        return analysis;
-    }
+//    public HashMap<String, Integer> analysisMessages(String room) {
+//        HashMap<String, Integer> analysis = new HashMap<>();
+//        List<Message> messageList = messageRepository.findAllByRoom(room);
+//
+//        for (Message message : messageList) {
+//            String contentType = message.getContentType();
+//
+//            // Check if the content type is already present in the analysis map
+//            if (analysis.containsKey(contentType)) {
+//                // If it is, increment the count by 1
+//                analysis.put(contentType, analysis.get(contentType) + 1);
+//            } else {
+//                // If it's not present, add it to the map with count as 1
+//                analysis.put(contentType, 1);
+//            }
+//        }
+//
+//        return analysis;
+//    }
 
 
 
