@@ -33,18 +33,19 @@ public class SocketService {
                 .messageType(MessageType.CLIENT)
                 .content(message.getContent())
                 .room(message.getRoom())
+                .contentType(message.getContentType())
                 .username(message.getUsername())
                 .build());
         sendSocketMessage(senderClient, storedMessage, message.getRoom());
     }
 
-    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username) {
-        Message storedMessage = messageService.saveMessage(Message.builder()
-                .messageType(MessageType.SERVER)
+    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType) {
+        Message storedMessage =  messageService.saveMessage(Message.builder()
                 .content(message)
                 .room(room)
+                .contentType(contentType)
                 .username(username)
                 .build());
-        sendSocketMessage(senderClient, storedMessage, room);
+        sendSocketMessage(senderClient, storedMessage,room);
     }
 }

@@ -1,6 +1,7 @@
 package com.backend.Retrospect.user.utility;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ public class EmailSender {
     @Autowired
     private JavaMailSender mailSender;
 
-
+    @Bean
     public void sendEmail(String toEmail, String subject, String body) {
         if (toEmail == null || subject == null || body == null) {
             System.out.println("Email cannot be sent: One or more parameters are null.");

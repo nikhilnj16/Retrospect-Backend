@@ -1,13 +1,10 @@
 package com.backend.Retrospect.room.service;
 
 
-import com.backend.Retrospect.room.entiry.RoomEntity;
+import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.repository.IRoomRepository;
-import com.backend.Retrospect.user.DTO.UserLoginDTO;
-import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.utility.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +21,7 @@ public class RoomService implements IRoomService {
 
 
     @Override
-    public List<RoomEntity> getAllRooms() {
+    public List<com.backend.Retrospect.room.entity.RoomEntity> getAllRooms() {
 
         return repoRoom.findAll();
     }
@@ -43,7 +40,7 @@ public class RoomService implements IRoomService {
     }
 
     @Override
-    public RoomEntity getRoomById(Long id) {
+    public com.backend.Retrospect.room.entity.RoomEntity getRoomById(Long id) {
 
          return repoRoom.findById(id).get();
     }

@@ -1,7 +1,6 @@
 package com.backend.Retrospect.room.controller;
 
-
-import com.backend.Retrospect.room.entiry.RoomEntity;
+import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.service.IRoomService;
 import org.springdoc.core.configuration.SpringDocUIConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;

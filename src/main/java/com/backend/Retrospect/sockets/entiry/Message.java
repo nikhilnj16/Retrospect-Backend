@@ -25,6 +25,7 @@ public class Message extends BaseModel {
     private String content;
     private String room;
     private String username;
+    private String contentType;
 
 
 }
