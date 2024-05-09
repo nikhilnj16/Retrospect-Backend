@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UserRoomJoinDTO {
 
-    private long userId;
-    private long roomId;
-    private String timeStamp;
+    private String userId;
+    private String roomId;
+
 }

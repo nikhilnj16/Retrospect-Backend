@@ -1,5 +1,7 @@
 package com.backend.Retrospect.sockets;
 
+import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
+import com.backend.Retrospect.roomToUser.entity.RoomToUserId;
 import com.backend.Retrospect.sockets.entiry.Message;
 import com.backend.Retrospect.sockets.service.MessageService;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -27,6 +29,9 @@ public class SocketService {
     }
 
     public void saveMessage(SocketIOClient senderClient, Message message) {
+
+
+
         Message storedMessage = messageService.saveMessage(Message.builder()
                 .messageType(message.getMessageType())
                 .content(message.getContent())

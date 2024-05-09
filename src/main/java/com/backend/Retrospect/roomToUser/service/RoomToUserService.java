@@ -11,6 +11,8 @@ import com.backend.Retrospect.user.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -29,8 +31,8 @@ public class RoomToUserService implements IRoomToUserService{
 
     @Override
     public HashMap<String, String> UserJoinedRoom(UserRoomJoinDTO userRoomJoinDTO) {
-        Optional<RoomEntity> roomOptional = roomRepository.findById(userRoomJoinDTO.getRoomId());
-        Optional<UserEntity> userOptional = userRepository.findById(userRoomJoinDTO.getUserId());
+        Optional<RoomEntity> roomOptional = roomRepository.findById(Long.valueOf(userRoomJoinDTO.getRoomId()));
+        Optional<UserEntity> userOptional = userRepository.findById(Long.valueOf(userRoomJoinDTO.getUserId()));
         HashMap<String, String> map = new HashMap<>();
 
         if (roomOptional.isPresent() && userOptional.isPresent()) {
@@ -40,7 +42,8 @@ public class RoomToUserService implements IRoomToUserService{
             RoomToUserId roomToUserId = new RoomToUserId();
             roomToUserId.setRoomEntity(roomEntity);
             roomToUserId.setUserEntity(userEntity);
-            roomToUserId.setTimeStamp(userRoomJoinDTO.getTimeStamp());
+            LocalDate timeStamp = LocalDate.now();
+            roomToUserId.setTimeStamp(timeStamp.toString());
 
             try {
                 RoomToUserEntity roomToUserEntity = new RoomToUserEntity();
