@@ -2,6 +2,7 @@ package com.backend.Retrospect.room.service;
 
 
 import com.backend.Retrospect.room.dto.CreateRoomDTO;
+import com.backend.Retrospect.room.dto.RoomPassKeyDTO;
 import com.backend.Retrospect.room.entity.RoomEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -13,4 +14,6 @@ public interface IRoomService {
     String editRoomById(Long id,RoomEntity roomEntity);
     HashMap<String ,String> deleteRoomById(Long id);
     HashMap<String ,String > create(CreateRoomDTO createRoomDTO);
+
+    HashMap<String, String> roomPassKeyChecker(RoomPassKeyDTO roomPassKeyDTO);
 }

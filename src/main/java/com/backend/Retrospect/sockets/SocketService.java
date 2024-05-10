@@ -42,13 +42,13 @@ public class SocketService {
         sendSocketMessage(senderClient, storedMessage, message.getRoom());
     }
 
-    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType ) {
-        Message storedMessage = messageService.saveMessage(Message.builder()
-                .content(message)
-                .room(room)
-                .contentType(contentType)
-                .username(username)
-                .build());
-        sendSocketMessage(senderClient, storedMessage, room);
-    }
+//    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType ) {
+//        Message storedMessage = messageService.saveMessage(Message.builder()
+//                .content(message)
+//                .room(room)
+//                .contentType(contentType)
+//                .username(username)
+//                .build());
+//        sendSocketMessage(senderClient, storedMessage, room);
+//    }
 }

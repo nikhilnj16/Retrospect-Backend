@@ -2,6 +2,7 @@ package com.backend.Retrospect.room.service;
 
 
 import com.backend.Retrospect.room.dto.CreateRoomDTO;
+import com.backend.Retrospect.room.dto.RoomPassKeyDTO;
 import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.repository.IRoomRepository;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
@@ -80,6 +81,8 @@ public class RoomService implements IRoomService {
             roomEntity.setRoomName(createRoomDTO.getRoomName());
             roomEntity.setRoomDescription(createRoomDTO.getRoomDescription());
             roomEntity.setActive(createRoomDTO.isActive());
+            roomEntity.setRestrictedRoom(createRoomDTO.isRestrictedRoom());
+            roomEntity.setRestrictedRoomPassKey(createRoomDTO.getRestrictedRoomPassKey());
             // Set room active status (you can uncomment this line if you have a way to determine the active status)
             // roomEntity.setActive(createRoomDTO.isActive());
 
@@ -100,5 +103,26 @@ public class RoomService implements IRoomService {
             return map;
         }
     }
+
+    @Override
+    public HashMap<String, String> roomPassKeyChecker(RoomPassKeyDTO roomPassKeyDTO) {
+        HashMap<String, String> result = new HashMap<>();
+        Optional<RoomEntity> roomEntityOptional = repoRoom.findById(roomPassKeyDTO.getRoomId());
+        if (roomEntityOptional.isPresent()) {
+            RoomEntity roomEntity = roomEntityOptional.get();
+            if (roomPassKeyDTO.getRoomPassKey().equals(roomEntity.getRestrictedRoomPassKey())) {
+                result.put("status", "success");
+                result.put("message", "Passkey is correct.");
+            } else {
+                result.put("status", "failure");
+                result.put("message", "Passkey is incorrect.");
+            }
+        } else {
+            result.put("status", "failure");
+            result.put("message", "Room not found.");
+        }
+        return result;
+    }
+
 
 }

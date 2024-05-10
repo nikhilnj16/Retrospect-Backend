@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,8 @@ public class RoomToUserService implements IRoomToUserService{
             RoomToUserId roomToUserId = new RoomToUserId();
             roomToUserId.setRoomEntity(roomEntity);
             roomToUserId.setUserEntity(userEntity);
-            LocalDate timeStamp = LocalDate.now();
+
+            LocalDateTime timeStamp = LocalDateTime.now();
             roomToUserId.setTimeStamp(timeStamp.toString());
 
             try {

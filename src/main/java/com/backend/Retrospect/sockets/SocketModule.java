@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 
 @Component
 @Slf4j
@@ -61,20 +60,10 @@ public class SocketModule {
             var params = client.getHandshakeData().getUrlParams();
             String room = String.join("", params.get("room"));
             String username = String.join("", params.get("username"));
-////            roomToUserService.UserJoinedRoom()
-//            UserEntity userEntity = userRepository.findByName(username);
-//            LocalDateTime localDateTime  = LocalDateTime.now();
-//
-//
-//            UserRoomJoinDTO userRoomJoinDTO  = new UserRoomJoinDTO();
-//            userRoomJoinDTO.setRoomId(Long.parseLong(room));
-//            userRoomJoinDTO.setUserId(userEntity.getUserId());
-//
-//            roomToUserService.UserJoinedRoom(userRoomJoinDTO);
 
             String contentType = "connected";
             client.joinRoom(room);
-            socketService.saveInfoMessage(client, String.format(Constants.WELCOME_MESSAGE, username), room ,username ,contentType);
+//            socketService.saveInfoMessage(client, String.format(Constants.WELCOME_MESSAGE, username), room ,username ,contentType);
             log.info("Socket ID[{}] - room[{}] - username[{}] - content[{}] connected to chat", client.getSessionId().toString(), room, username, contentType);
         };
     }
@@ -88,7 +77,7 @@ public class SocketModule {
             String room = String.join("", params.get("room"));
             String username = String.join("", params.get("username"));
             String contentType = "disconnected";
-            socketService.saveInfoMessage(client, String.format(Constants.DISCONNECT_MESSAGE, username), room ,username , contentType);
+//            socketService.saveInfoMessage(client, String.format(Constants.DISCONNECT_MESSAGE, username), room ,username , contentType);
             log.info("Socket ID[{}] - room[{}] - username [{}]  disconnected to chat module through", client.getSessionId().toString(), room, username);
         };
     }
