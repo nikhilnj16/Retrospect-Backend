@@ -8,6 +8,9 @@ import com.backend.Retrospect.room.repository.IRoomRepository;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserId;
 import com.backend.Retrospect.roomToUser.repository.IRoomToUserRepository;
+import com.backend.Retrospect.topic.dto.TopicDTO;
+import com.backend.Retrospect.topic.entity.TopicEntity;
+import com.backend.Retrospect.topic.repository.ITopicRepository;
 import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
 import com.backend.Retrospect.user.utility.UserToken;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +39,9 @@ public class RoomService implements IRoomService {
 
     @Autowired
     IRoomToUserRepository roomToUserRepository;
+
+    @Autowired
+    ITopicRepository topicRepository;
 
 
     @Override
@@ -83,26 +90,41 @@ public class RoomService implements IRoomService {
             roomEntity.setActive(createRoomDTO.isActive());
             roomEntity.setRestrictedRoom(createRoomDTO.isRestrictedRoom());
             roomEntity.setRestrictedRoomPassKey(createRoomDTO.getRestrictedRoomPassKey());
-            // Set room active status (you can uncomment this line if you have a way to determine the active status)
-            // roomEntity.setActive(createRoomDTO.isActive());
 
             // Set the user entity to the room entity
             roomEntity.setUser(userEntity);
+
+            // Map topic IDs to TopicEntity objects
+            List<TopicEntity> topics = new ArrayList<>();
+            for (TopicDTO topicDTO : createRoomDTO.getTopics()) {
+                Optional<TopicEntity> topicEntityOptional = topicRepository.findById(topicDTO.getTopicId());
+                if (topicEntityOptional.isPresent()) {
+                    TopicEntity topicEntity = topicEntityOptional.get();
+                    topics.add(topicEntity);
+                } else {
+                    // Handle the case where a topic with the specified ID is not found
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("status", "failed to create room: topic not found with ID " + topicDTO.getTopicId());
+                    return map;
+                }
+            }
+            roomEntity.setTopics(topics);
 
             // Save the room entity
             repoRoom.save(roomEntity);
 
             // Return a success message
-            HashMap<String,String> map = new HashMap<>();
+            HashMap<String, String> map = new HashMap<>();
             map.put("status", "successfully created");
             return map;
         } else {
             // Handle the case where the user with the specified ID is not found
-            HashMap<String,String> map = new HashMap<>();
+            HashMap<String, String> map = new HashMap<>();
             map.put("status", "failed to create room: user not found");
             return map;
         }
     }
+
 
     @Override
     public HashMap<String, String> roomPassKeyChecker(RoomPassKeyDTO roomPassKeyDTO) {

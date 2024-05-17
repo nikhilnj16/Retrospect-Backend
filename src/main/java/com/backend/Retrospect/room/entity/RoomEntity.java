@@ -1,10 +1,13 @@
 package com.backend.Retrospect.room.entity;
 
 
+import com.backend.Retrospect.topic.entity.TopicEntity;
 import com.backend.Retrospect.user.entity.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.List;
 
 
 @Entity
@@ -32,4 +35,13 @@ public class RoomEntity {
     private boolean restrictedRoom;
 
     private String restrictedRoomPassKey;
+
+    @ManyToMany
+    @JoinTable(
+            name = "room_topic",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
+    private List<TopicEntity> topics;
 }
+
