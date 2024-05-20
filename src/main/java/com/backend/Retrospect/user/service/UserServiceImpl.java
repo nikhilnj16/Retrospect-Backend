@@ -10,6 +10,8 @@ import com.backend.Retrospect.user.utility.EmailSender;
 import com.backend.Retrospect.user.utility.UserToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -125,6 +127,11 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    @Override
+    public UserEntity getUserDetails(String email) {
+        return repository.findByEmail(email);
+    }
+
 
     public void sendEmailToAllUsers(UserEmailDTO userEmailDTO, String link)
     {
@@ -154,10 +161,8 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-
-
-
-
-
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 }
