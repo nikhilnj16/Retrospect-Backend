@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public interface IRoomService {
     List<RoomEntity> getAllRooms(@RequestHeader String token);
@@ -16,4 +17,6 @@ public interface IRoomService {
     HashMap<String ,String > create(CreateRoomDTO createRoomDTO);
 
     HashMap<String, String> roomPassKeyChecker(RoomPassKeyDTO roomPassKeyDTO);
+
+    Optional<RoomEntity> getRoom(String id);
 }

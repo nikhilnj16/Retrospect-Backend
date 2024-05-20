@@ -5,8 +5,6 @@ import com.backend.Retrospect.room.dto.CreateRoomDTO;
 import com.backend.Retrospect.room.dto.RoomPassKeyDTO;
 import com.backend.Retrospect.room.entity.RoomEntity;
 import com.backend.Retrospect.room.repository.IRoomRepository;
-import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
-import com.backend.Retrospect.roomToUser.entity.RoomToUserId;
 import com.backend.Retrospect.roomToUser.repository.IRoomToUserRepository;
 import com.backend.Retrospect.topic.dto.TopicDTO;
 import com.backend.Retrospect.topic.entity.TopicEntity;
@@ -18,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -144,6 +140,11 @@ public class RoomService implements IRoomService {
             result.put("message", "Room not found.");
         }
         return result;
+    }
+
+    @Override
+    public Optional<RoomEntity> getRoom(String id) {
+        return repoRoom.findById(Long.valueOf(id));
     }
 
 

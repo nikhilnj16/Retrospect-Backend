@@ -26,6 +26,14 @@ public class MessageService {
         return messageRepository.save(message);
     }
 
+    public HashMap<String, String> deleteMessageById(Long messageId) {
+        HashMap<String, String> message = new HashMap<>();
+        messageRepository.deleteById(messageId);
+        message.put("status", "success");
+        return message;
+
+    }
+
 //    public HashMap<String, Integer> analysisMessages(String room) {
 //        HashMap<String, Integer> analysis = new HashMap<>();
 //        List<Message> messageList = messageRepository.findAllByRoom(room);
