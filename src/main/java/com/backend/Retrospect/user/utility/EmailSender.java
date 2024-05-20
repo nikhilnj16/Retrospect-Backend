@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailSender {
     @Autowired
-    private JavaMailSender mailSender;
+    JavaMailSender mailSender;
 
-    @Bean
+
     public void sendEmail(String toEmail, String subject, String body) {
         if (toEmail == null || subject == null || body == null) {
             System.out.println("Email cannot be sent: One or more parameters are null.");
@@ -19,8 +19,9 @@ public class EmailSender {
         }
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("madarhuss12345@gmail.com");
+        message.setFrom("jawaharbhaskaran@gmail.com");
         message.setTo(toEmail);
+        System.out.println(toEmail);
         message.setText(body);
         message.setSubject(subject);
 

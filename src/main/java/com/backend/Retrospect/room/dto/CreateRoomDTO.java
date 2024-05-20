@@ -8,4 +8,6 @@ public class CreateRoomDTO {
     private String user;
     private boolean active;
     private String roomDescription;
+    private boolean restrictedRoom;
+    private String restrictedRoomPassKey;
 }

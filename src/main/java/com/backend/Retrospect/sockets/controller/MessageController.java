@@ -19,7 +19,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @CrossOrigin
-    @GetMapping("/{room}")
+    @GetMapping("/message/{room}")
     public ResponseEntity<List<Message>> getMessages(@PathVariable String room) {
         return ResponseEntity.ok(messageService.getMessages(room));
     }

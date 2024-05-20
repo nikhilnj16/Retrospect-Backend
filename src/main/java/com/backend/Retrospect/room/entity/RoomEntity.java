@@ -31,7 +31,10 @@ public class RoomEntity {
     private UserEntity user;
 
     private boolean active;
+
     private String roomDescription;
+
     private boolean restrictedRoom;
+
     private String restrictedRoomPassKey;
 }

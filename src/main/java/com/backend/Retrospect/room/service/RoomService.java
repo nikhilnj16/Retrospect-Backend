@@ -79,6 +79,8 @@ public class RoomService implements IRoomService {
             roomEntity.setRoomName(createRoomDTO.getRoomName());
             roomEntity.setRoomDescription(createRoomDTO.getRoomDescription());
             roomEntity.setActive(createRoomDTO.isActive());
+            roomEntity.setRestrictedRoom(createRoomDTO.isRestrictedRoom());
+            roomEntity.setRestrictedRoomPassKey(createRoomDTO.getRestrictedRoomPassKey());
             // Set room active status (you can uncomment this line if you have a way to determine the active status)
             // roomEntity.setActive(createRoomDTO.isActive());
 
@@ -118,8 +120,5 @@ public class RoomService implements IRoomService {
         }
         return result;
     }
-
-
-
 
 }

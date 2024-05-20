@@ -1,11 +1,5 @@
 package com.backend.Retrospect.user.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
 public class UserPasswordChangeDTO {
     String oldPassword;
     String newPassword;
@@ -14,7 +8,7 @@ public class UserPasswordChangeDTO {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
     }
-    public UserPasswordChangeDTO() {
+    public UserPasswordChangeDTO(){
 
     }
 

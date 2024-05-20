@@ -1,10 +1,12 @@
 package com.backend.Retrospect.sockets.entiry;
 
+import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
 import com.backend.Retrospect.sockets.entiry.BaseModel;
 import com.backend.Retrospect.sockets.entiry.MessageType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 
@@ -24,4 +26,6 @@ public class Message extends BaseModel {
     private String username;
     private String contentType;
 
+    @ManyToOne
+    private RoomToUserEntity roomToUser;
 }

@@ -20,9 +20,10 @@ import org.springframework.stereotype.Component;
 public class SocketIOConfig {
 
     @Value("${socket-server.host}")
+
     private String host;
 
-    @Value("${socket-server.port}")
+   @Value("${socket-server.port}")
     private Integer port;
     private SocketIOServer server;
 
@@ -31,31 +32,6 @@ public class SocketIOConfig {
         com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
         config.setHostname(host);
         config.setPort(port);
-        server = new SocketIOServer(config);
-        server.start();
-        server.addConnectListener(new ConnectListener() {
-            @Override
-            public void onConnect(SocketIOClient client) {
-
-                log.info("new user connected with socket " + client.getSessionId());
-            }
-        });
-
-        server.addDisconnectListener(new DisconnectListener() {
-            @Override
-            public void onDisconnect(SocketIOClient client) {
-                client.getNamespace().getAllClients().stream().forEach(data-> {
-                    log.info("user disconnected "+data.getSessionId().toString());});
-            }
-        });
-        return server;
+        return new SocketIOServer(config);
     }
-
-    @PreDestroy
-    public void stopSocketIOServer() {
-        this.server.stop();
     }
-        //  config.setContext("/socket.io");
-
-}
-

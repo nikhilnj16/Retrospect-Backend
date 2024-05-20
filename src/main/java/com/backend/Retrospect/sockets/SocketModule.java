@@ -1,7 +1,10 @@
 package com.backend.Retrospect.sockets;
 
+import com.backend.Retrospect.room.repository.IRoomRepository;
+import com.backend.Retrospect.roomToUser.repository.IRoomToUserRepository;
 import com.backend.Retrospect.sockets.constants.Constants;
 import com.backend.Retrospect.sockets.entiry.Message;
+import com.backend.Retrospect.user.repository.IUserRepository;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -16,7 +19,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SocketModule {
 
-
+    @Autowired
+    IRoomToUserRepository roomToUserRepository;
+    @Autowired
+    IRoomRepository roomRepository;
+    @Autowired
+    IUserRepository userRepository;
     @Autowired
     SocketIOServer server;
     @Autowired
@@ -50,7 +58,7 @@ public class SocketModule {
             String contentype = "connected";
             client.joinRoom(room);
             socketService.saveInfoMessage(client,String.format(Constants.WELCOME_MESSAGE,username),room,username,contentype);
-            log.info("Socket ID[{}] - room[{}] - username [{}]  Connected to chat module through", client.getSessionId().toString(), room, username);
+            log.info("Socket ID[{}] - room[{}] - username [{}] - content[{}] connected to chat", client.getSessionId().toString(), room, username, contentype);
         };
 
     }
