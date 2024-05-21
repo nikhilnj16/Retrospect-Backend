@@ -59,8 +59,8 @@ public class UserServiceImpl implements IUserService {
             return response;
 
         } else {
-            response.put("Status" , "Login Failed");
-            return null;
+            response.put("Status" , "Login failed");
+            return response;
         }
 
     }

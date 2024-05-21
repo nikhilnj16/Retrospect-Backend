@@ -37,4 +37,12 @@ public class RoomEntity {
     private boolean restrictedRoom;
 
     private String restrictedRoomPassKey;
+
+    @ManyToMany
+    @JoinTable(
+            name = "room_topic",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
+    private List<TopicEntity> topics;
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -22,6 +23,11 @@ public class RoomController {
     public List<RoomEntity> getRooms(@RequestHeader String token){
          return iRoomService.getAllRooms(token);
     }
+    @GetMapping("/get/{id}")
+    public Optional<RoomEntity> getRoom(@PathVariable String id){
+        return iRoomService.getRoom(id);
+    }
+
     @PostMapping("/create")
     public HashMap<String, String> setRoom(@RequestBody CreateRoomDTO createRoomDTO){
         System.out.println(createRoomDTO);

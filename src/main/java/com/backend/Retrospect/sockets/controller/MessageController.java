@@ -25,10 +25,16 @@ public class MessageController {
     }
 
 //    @GetMapping("/analysisMessage/{room}")
-//    public ResponseEntity<HashMap<String,Integer>> analysisMessages(@PathVariable String room)
-//    {
+//    public ResponseEntity<HashMap<String ,Integer>> analysisMessages(@PathVariable String room){
 //        return ResponseEntity.ok(messageService.analysisMessages(room));
 //    }
+
+
+
+    @DeleteMapping("/message/delete/{messageId}")
+    public HashMap<String, String > deleteMessage(@PathVariable Long messageId) {
+        return messageService.deleteMessageById(messageId);
+    }
 
 
 }

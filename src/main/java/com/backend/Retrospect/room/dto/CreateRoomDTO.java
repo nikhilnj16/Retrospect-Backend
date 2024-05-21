@@ -1,6 +1,9 @@
 package com.backend.Retrospect.room.dto;
 
-import lombok.Data;
+import com.backend.Retrospect.topic.dto.TopicDTO;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 public class CreateRoomDTO {
@@ -10,4 +13,5 @@ public class CreateRoomDTO {
     private String roomDescription;
     private boolean restrictedRoom;
     private String restrictedRoomPassKey;
+    private List<TopicDTO> topics; // Use TopicDTO instead of TopicEntity
 }

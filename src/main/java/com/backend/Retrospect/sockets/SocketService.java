@@ -29,7 +29,7 @@ public class SocketService {
 
     public void saveMessage(SocketIOClient senderClient, Message message) {
         Message storedMessage = messageService.saveMessage(Message.builder()
-                .messageType(MessageType.CLIENT)
+                .messageType(message.getMessageType())
                 .content(message.getContent())
                 .room(message.getRoom())
                 .contentType(message.getContentType())
@@ -38,13 +38,13 @@ public class SocketService {
         sendSocketMessage(senderClient, storedMessage, message.getRoom());
     }
 
-    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType) {
-        Message storedMessage =  messageService.saveMessage(Message.builder()
-                .content(message)
-                .room(room)
-                .contentType(contentType)
-                .username(username)
-                .build());
-        sendSocketMessage(senderClient, storedMessage,room);
-    }
+//    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType ) {
+//        Message storedMessage = messageService.saveMessage(Message.builder()
+//                .content(message)
+//                .room(room)
+//                .contentType(contentType)
+//                .username(username)
+//                .build());
+//        sendSocketMessage(senderClient, storedMessage, room);
+//    }
 }

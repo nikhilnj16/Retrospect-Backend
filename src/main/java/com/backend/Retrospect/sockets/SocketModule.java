@@ -1,9 +1,12 @@
 package com.backend.Retrospect.sockets;
 
 import com.backend.Retrospect.room.repository.IRoomRepository;
+import com.backend.Retrospect.roomToUser.dto.UserRoomJoinDTO;
 import com.backend.Retrospect.roomToUser.repository.IRoomToUserRepository;
+import com.backend.Retrospect.roomToUser.service.RoomToUserService;
 import com.backend.Retrospect.sockets.constants.Constants;
 import com.backend.Retrospect.sockets.entiry.Message;
+import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
@@ -30,6 +33,10 @@ public class SocketModule {
     @Autowired
     SocketService socketService;
 
+    @Autowired
+    private RoomToUserService roomToUserService;
+
+
     public SocketModule(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
@@ -42,7 +49,7 @@ public class SocketModule {
 
     private DataListener<Message> onChatReceived() {
         return (senderClient, data, ackSender) -> {
-            log.info("Received message from client {}: {}", senderClient.getSessionId(), data.getContent(),data.getContentType());
+            log.info("Received message from client {}: {} : {}", senderClient.getSessionId(), data.getContent() ,data.getContentType());
             socketService.saveMessage(senderClient, data);
             // Handle sending the message to other clients
             server.getRoomOperations(data.getRoom()).sendEvent("receive_message", data);
@@ -57,7 +64,7 @@ public class SocketModule {
             String username = String.join("", params.get("username"));
             String contentype = "connected";
             client.joinRoom(room);
-            socketService.saveInfoMessage(client,String.format(Constants.WELCOME_MESSAGE,username),room,username,contentype);
+//            socketService.saveInfoMessage(client,String.format(Constants.WELCOME_MESSAGE,username),room,username,contentype);
             log.info("Socket ID[{}] - room[{}] - username [{}] - content[{}] connected to chat", client.getSessionId().toString(), room, username, contentype);
         };
 
@@ -69,9 +76,17 @@ public class SocketModule {
             String room = String.join("", params.get("room"));
             String username = String.join("", params.get("username"));
             String contentType = "Disconnected";
-            socketService.saveInfoMessage(client, String.format(Constants.DISCONNECT_MESSAGE, username), room ,username,contentType);
+//            socketService.saveInfoMessage(client, String.format(Constants.DISCONNECT_MESSAGE, username), room ,username,contentType);
             log.info("Socket ID[{}] - room[{}] - username [{}]  disconnected to chat module through", client.getSessionId().toString(), room, username);
         };
     }
-
+    //    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType ) {
+//        Message storedMessage = messageService.saveMessage(Message.builder()
+//                .content(message)
+//                .room(room)
+//                .contentType(contentType)
+//                .username(username)
+//                .build());
+//        sendSocketMessage(senderClient, storedMessage, room);
+//    }
 }

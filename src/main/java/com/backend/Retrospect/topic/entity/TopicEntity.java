@@ -1,6 +1,7 @@
 package com.backend.Retrospect.topic.entity;
 
 import com.backend.Retrospect.room.entity.RoomEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,11 +14,8 @@ public class TopicEntity {
     long topicId;
     String topicName;
 
-    public TopicEntity(long topicId, String topicName) {
-        this.topicId = topicId;
-        this.topicName = topicName;
-    }
-    public TopicEntity(){
-
-    }
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    @JsonIgnore
+    private RoomEntity room;
 }

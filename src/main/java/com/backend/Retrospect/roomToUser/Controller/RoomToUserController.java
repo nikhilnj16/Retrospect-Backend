@@ -3,9 +3,11 @@ package com.backend.Retrospect.roomToUser.Controller;
 import com.backend.Retrospect.roomToUser.dto.UserRoomJoinDTO;
 import com.backend.Retrospect.roomToUser.dto.UsersInRoom;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
+import com.backend.Retrospect.roomToUser.entity.RoomToUserId;
 import com.backend.Retrospect.roomToUser.service.RoomToUserService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

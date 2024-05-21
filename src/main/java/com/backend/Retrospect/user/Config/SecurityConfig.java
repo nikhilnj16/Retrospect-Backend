@@ -22,6 +22,7 @@ import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,13 +44,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.function.client.WebClient;
 
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-    @Autowired
+
     private final KeycloakLogoutHandler keycloakLogoutHandler;
 
     @Autowired
@@ -66,6 +70,7 @@ public class SecurityConfig {
         this.keycloakLogoutHandler = keycloakLogoutHandler;
     }
 
+
     @Bean
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
         return new NullAuthenticatedSessionStrategy();
@@ -78,23 +83,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   CustomKeycloakAuthenticationProvider authenticationProvider) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/**").authenticated()
-                        .anyRequest().permitAll())
-                .oauth2ResourceServer(server -> server.jwt(new JwtResourceServerCustomizer(authenticationProvider)))
-                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .logout(logout -> logout.addLogoutHandler(keycloakLogoutHandler).logoutSuccessHandler(
-                        (request, response, authentication) -> SecurityContextHolder.clearContext()));
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/public/*", "/topic/" ,"/user/*").permitAll() // Allow unauthenticated access to these endpoints
+                        .anyRequest().permitAll()) // Secure all other endpoints
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/actuator/**", "/v3/api-docs/**", "/swagger**/**",
-                "/swagger/**","/swagger-ui.html","api/valuation/generateReport/**","api/valuation/site/**","api/valuation/location/**","api/valuation/generateReport1/**","api/valuation/create/**","api/valuation/moves3");
+        return (web) -> web.ignoring().requestMatchers("/actuator/*", "/v3/api-docs/", "/swagger/*",
+                "/swagger/**","/swagger-ui.html" , "http://192.168.0.6:8080/topic/getAllTopic" ,"http://localhost:8080/topic/getAllTopic" );
     }
 
     public interface Jwt2AuthoritiesConverter extends Converter<Jwt, Collection<? extends GrantedAuthority>> {
@@ -108,22 +111,15 @@ public class SecurityConfig {
             final var realmAccess = (Map<String, Object>) jwt.getClaims().getOrDefault("realm_access", Map.of());
             final var realmRoles = (Collection<String>) realmAccess.getOrDefault("roles", List.of());
 
-            final var resourceAccess = (Map<String, Object>) jwt.getClaims().getOrDefault("resou`rce_access", Map.of());
-
-            // We assume here you have "spring-addons-confidential" and
-            // "spring-addons-public" clients configured with "client roles" mapper in
-            // Keycloak
+            final var resourceAccess = (Map<String, Object>) jwt.getClaims().getOrDefault("resource_access", Map.of());
             final var confidentialClientAccess = (Map<String, Object>) resourceAccess
                     .getOrDefault("spring-addons-confidential", Map.of());
-            final var confidentialClientRoles = (Collection<String>) confidentialClientAccess.getOrDefault("roles",
-                    List.of());
-            final var publicClientAccess = (Map<String, Object>) resourceAccess.getOrDefault("spring-addons-public",
-                    Map.of());
+            final var confidentialClientRoles = (Collection<String>) confidentialClientAccess.getOrDefault("roles", List.of());
+            final var publicClientAccess = (Map<String, Object>) resourceAccess.getOrDefault("spring-addons-public", Map.of());
             final var publicClientRoles = (Collection<String>) publicClientAccess.getOrDefault("roles", List.of());
 
             // Merge the 3 sources of roles and map it to spring-security authorities
-            return Stream
-                    .concat(realmRoles.stream(),
+            return Stream.concat(realmRoles.stream(),
                             Stream.concat(confidentialClientRoles.stream(), publicClientRoles.stream()))
                     .map(SimpleGrantedAuthority::new).toList();
         };
@@ -133,7 +129,6 @@ public class SecurityConfig {
         return jwt -> new JwtAuthenticationToken(jwt, authoritiesConverter.convert(jwt),
                 jwt.getClaimAsString(StandardClaimNames.PREFERRED_USERNAME));
     }
-
     @Bean
     WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client = new ServletOAuth2AuthorizedClientExchangeFilterFunction(
@@ -146,14 +141,6 @@ public class SecurityConfig {
     public OAuth2AuthorizedClientManager authorizedClientManager(
             final ClientRegistrationRepository clientRegistrationRepository,
             final OAuth2AuthorizedClientService authorizedClientService) {
-
-        // Create RestTemplate that will be used for the authorization request
-        // It's mandatory to add FormHttpMessageConverter and
-        // OAuth2AccessTokenResponseHttpMessageConverter
-        // See javadoc from
-        // DefaultClientCredentialsTokenResponseClient.setRestOperations(RestOperations
-        // restOperations)
-        // for further information
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         if (StringUtils.isNotBlank(proxyHost) && proxyPort != null) {
             Proxy proxy = new Proxy(Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
@@ -163,13 +150,9 @@ public class SecurityConfig {
                 Arrays.asList(new FormHttpMessageConverter(), new OAuth2AccessTokenResponseHttpMessageConverter()));
         restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
         restTemplate.setRequestFactory(requestFactory);
-        // Create new client and pass our custom resttemplate
         final var tokenResponseClient = new DefaultClientCredentialsTokenResponseClient();
         tokenResponseClient.setRestOperations(restTemplate);
 
-        // Create ClientCredentialsOAuth2AuthorizedClientProvider and override default
-        // setAccessTokenResponseClient
-        // with the one we created in this method
         final var authorizedClientProvider = new ClientCredentialsOAuth2AuthorizedClientProvider();
         authorizedClientProvider.setAccessTokenResponseClient(tokenResponseClient);
 
@@ -179,5 +162,18 @@ public class SecurityConfig {
 
         return authorizedClientManager;
     }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8084")); // Adjust according to your needs
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        configuration.setExposedHeaders(List.of("x-auth-token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 
 }
