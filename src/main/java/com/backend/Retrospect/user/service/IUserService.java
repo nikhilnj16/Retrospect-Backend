@@ -5,14 +5,17 @@ import com.backend.Retrospect.user.DTO.UserDetailsChangeDTO;
 import com.backend.Retrospect.user.DTO.UserLoginDTO;
 import com.backend.Retrospect.user.DTO.UserPasswordChangeDTO;
 import com.backend.Retrospect.user.entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.Authentication;
+
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-public interface IUserService extends UserDetailsService {
+public interface IUserService {
     HashMap<String, String> userRegistration(UserEntity userEntity);
 
     HashMap<String, String> userLogin(UserLoginDTO userLoginDto);
@@ -28,4 +31,6 @@ public interface IUserService extends UserDetailsService {
     ResponseEntity<List<String>> getAllEmailId();
 
    UserEntity getUserDetails(String email);
+
+    String getByToken( Authentication authentication);
 }
