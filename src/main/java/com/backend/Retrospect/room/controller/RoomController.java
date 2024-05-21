@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController("/room")
 @CrossOrigin("*")
@@ -45,6 +46,11 @@ public class RoomController {
 
         return iRoomService.roomPassKeyChecker(roomPassKeyDTO);
 
+    }
+
+    @GetMapping("/get/{id}")
+    public Optional<RoomEntity> getRoom(@PathVariable String id){
+        return iRoomService.getRoom(id);
     }
 
 

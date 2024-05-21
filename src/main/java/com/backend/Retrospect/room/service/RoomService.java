@@ -146,5 +146,10 @@ public class RoomService implements IRoomService {
         return result;
     }
 
+    @Override
+    public Optional<RoomEntity> getRoom(String id) {
+        return repoRoom.findById(Long.valueOf(id));
+    }
+
 
 }
