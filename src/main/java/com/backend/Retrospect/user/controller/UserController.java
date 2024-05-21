@@ -80,17 +80,12 @@ public class UserController {
 
 
 
-    @GetMapping("/getToken")
-    public String getByToken(Authentication authentication) {
-        // Check if authentication is not null and contains a JWT token
-        if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
-            // Call the service to get the token using the authentication object
-            String tokenAlreadyThere = service.getByToken(authentication);
-            return tokenAlreadyThere;
-        } else {
-            // Handle the case where the authentication is null or doesn't contain a JWT token
-            return "Invalid authentication or JWT token not found";
-        }
+    @GetMapping("/getToken/{emailId}")
+    public HashMap<String ,String> getByToken(@PathVariable String emailId) {
+
+        return service.regUserBySSO(emailId);
+
+
 
     }
 

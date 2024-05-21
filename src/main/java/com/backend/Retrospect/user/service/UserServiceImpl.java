@@ -176,6 +176,7 @@ public class UserServiceImpl implements IUserService {
 
 
 
+
     public void sendEmailToAllUsers(UserEmailDTO userEmailDTO, String link)
     {
         UserEntity userEntity = repository.findByEmail(userEmailDTO.getUserEmail());
@@ -203,9 +204,40 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    @Override
+    public HashMap<String, String> regUserBySSO(String emailId) {
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return null;
-//    }
+        UserEntity userEntity = repository.findByEmail(emailId);
+        if (userEntity == null) {
+            userEntity = new UserEntity();
+            userEntity.setUserEmail(emailId);
+            userEntity.setUserName(emailId);
+            repository.save(userEntity);
+
+            String SsoToken =  userToken.createToken(userEntity.getUserName());
+            HashMap<String, String> response = new HashMap<>();
+            response.put("Status" , "Created");
+            response.put("SsoToken", SsoToken);
+            response.put("userEmail", userEntity.getUserEmail());
+            response.put("userName", userEntity.getUserName());
+            response.put("userId", String.valueOf(userEntity.getUserId()));
+
+            return response;
+        }
+       else {
+           HashMap<String, String> response = new HashMap<>();
+           response.put("Status" , "User already exists");
+            String SsoToken =  userToken.createToken(userEntity.getUserName());
+            response.put("SsoToken", SsoToken);
+            response.put("userEmail", userEntity.getUserEmail());
+            response.put("userName", userEntity.getUserName());
+            response.put("userId", String.valueOf(userEntity.getUserId()));
+
+           return response;
+
+        }
+    }
+
+
+
 }

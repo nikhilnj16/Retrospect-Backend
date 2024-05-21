@@ -33,4 +33,7 @@ public interface IUserService {
    UserEntity getUserDetails(String email);
 
     String getByToken( Authentication authentication);
+
+    HashMap<String, String> regUserBySSO(String emailId);
 }
+
