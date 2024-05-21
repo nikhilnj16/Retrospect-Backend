@@ -12,8 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@RestController("/room")
 @CrossOrigin("*")
+
 public class RoomController {
 
     @Autowired
@@ -49,6 +50,11 @@ public class RoomController {
 
         return iRoomService.roomPassKeyChecker(roomPassKeyDTO);
 
+    }
+
+    @GetMapping("/get/{id}")
+    public Optional<RoomEntity> getRoom(@PathVariable String id){
+        return iRoomService.getRoom(id);
     }
 
 

@@ -17,6 +17,9 @@ public interface IRoomService {
     HashMap<String ,String > create(CreateRoomDTO createRoomDTO);
 
     HashMap<String, String> roomPassKeyChecker(RoomPassKeyDTO roomPassKeyDTO);
+<<<<<<< HEAD
 
+=======
+>>>>>>> keycloak
     Optional<RoomEntity> getRoom(String id);
 }

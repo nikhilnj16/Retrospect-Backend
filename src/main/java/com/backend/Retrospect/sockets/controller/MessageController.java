@@ -28,6 +28,11 @@ public class MessageController {
 //        return ResponseEntity.ok(messageService.analysisMessages(room));
 //    }
 
+    @DeleteMapping("/message/delete/{messageId}")
+    public HashMap<String, String > deleteMessage(@PathVariable Long messageId) {
+        return messageService.deleteMessageById(messageId);
+    }
+
 
 
     @DeleteMapping("/message/delete/{messageId}")

@@ -1,5 +1,6 @@
 package com.backend.Retrospect.user.service;
 
+import com.backend.Retrospect.user.Config.Utils;
 import com.backend.Retrospect.user.DTO.UserDetailsChangeDTO;
 import com.backend.Retrospect.user.DTO.UserEmailDTO;
 import com.backend.Retrospect.user.DTO.UserLoginDTO;
@@ -8,9 +9,17 @@ import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
 import com.backend.Retrospect.user.utility.EmailSender;
 import com.backend.Retrospect.user.utility.UserToken;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -29,6 +38,7 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     EmailSender emailSender;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public HashMap<String, String> userRegistration(UserEntity userEntity) {
@@ -125,6 +135,47 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    @Override
+    public UserEntity getUserDetails(String email) {
+        return repository.findByEmail(email);
+    }
+
+    @Override
+    public String getByToken( Authentication authentication) {
+        UserEntity userEntity = new UserEntity();
+        System.out.println(authentication);
+        try {
+            LOGGER.info("getUserInfo outside Function");
+            LOGGER.info("authentication.getPrincipal(): " + authentication);
+            if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
+                LOGGER.info("getUserInfo inside Function");
+                Jwt jwtToken = (Jwt) authentication.getPrincipal();
+                System.out.println(jwtToken);
+
+                userEntity.setUserName(jwtToken.getClaim("userName"));
+
+                userEntity.setUserEmail(jwtToken.getClaim("email"));
+                System.out.println(userEntity);
+
+//                this.getUserInformations(userEntity);
+//                String userInfo = "FirstName: " + userDetails.getFirstName() + ", LastName: " + userDetails.getLastName() + ", Email: " + userDetails.getEmailId();
+//                LOGGER.info("User Info: " + userInfo);
+                System.out.println(userEntity);
+                return "success";
+            } else {
+                LOGGER.warn("No authenticated user.");
+                throw new RuntimeException("Invalid JWT or authentication is null");
+            }
+        } catch (Exception e) {
+            LOGGER.error(" getUserInfo caused exception " +  e);
+            throw new RuntimeException(" getUserInfo caused exception " + e);
+        }
+
+
+    }
+
+
+
 
     public void sendEmailToAllUsers(UserEmailDTO userEmailDTO, String link)
     {
@@ -153,10 +204,39 @@ public class UserServiceImpl implements IUserService {
 
     }
 
+    @Override
+    public HashMap<String, String> regUserBySSO(String emailId) {
 
+        UserEntity userEntity = repository.findByEmail(emailId);
+        if (userEntity == null) {
+            userEntity = new UserEntity();
+            userEntity.setUserEmail(emailId);
+            userEntity.setUserName(emailId);
+            repository.save(userEntity);
 
+            String SsoToken =  userToken.createToken(userEntity.getUserName());
+            HashMap<String, String> response = new HashMap<>();
+            response.put("Status" , "Created");
+            response.put("SsoToken", SsoToken);
+            response.put("userEmail", userEntity.getUserEmail());
+            response.put("userName", userEntity.getUserName());
+            response.put("userId", String.valueOf(userEntity.getUserId()));
 
+            return response;
+        }
+       else {
+           HashMap<String, String> response = new HashMap<>();
+           response.put("Status" , "User already exists");
+            String SsoToken =  userToken.createToken(userEntity.getUserName());
+            response.put("SsoToken", SsoToken);
+            response.put("userEmail", userEntity.getUserEmail());
+            response.put("userName", userEntity.getUserName());
+            response.put("userId", String.valueOf(userEntity.getUserId()));
 
+           return response;
+
+        }
+    }
 
 
 

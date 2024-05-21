@@ -6,8 +6,13 @@ import com.backend.Retrospect.user.DTO.UserLoginDTO;
 import com.backend.Retrospect.user.DTO.UserPasswordChangeDTO;
 import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.service.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -73,6 +78,16 @@ public class UserController {
     }
 
 
+
+
+    @GetMapping("/getToken/{emailId}")
+    public HashMap<String ,String> getByToken(@PathVariable String emailId) {
+
+        return service.regUserBySSO(emailId);
+
+
+
+    }
 
 
 
