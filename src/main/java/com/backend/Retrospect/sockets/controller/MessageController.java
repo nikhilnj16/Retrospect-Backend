@@ -35,10 +35,5 @@ public class MessageController {
 
 
 
-    @DeleteMapping("/message/delete/{messageId}")
-    public HashMap<String, String > deleteMessage(@PathVariable Long messageId) {
-        return messageService.deleteMessageById(messageId);
-    }
-
 
 }
