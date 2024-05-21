@@ -24,10 +24,7 @@ public class RoomController {
     public List<RoomEntity> getRooms(@RequestHeader String token){
          return iRoomService.getAllRooms(token);
     }
-    @GetMapping("/get/{id}")
-    public Optional<RoomEntity> getRoom(@PathVariable String id){
-        return iRoomService.getRoom(id);
-    }
+
 
     @PostMapping("/create")
     public HashMap<String, String> setRoom(@RequestBody CreateRoomDTO createRoomDTO){
