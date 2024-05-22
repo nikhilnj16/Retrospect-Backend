@@ -64,7 +64,7 @@ public class CustomKeycloakAuthenticationProvider implements AuthenticationProvi
         String email = Utils.getSource();
         UserEntity userDetails = null;
 //        AMQUtils amqUtils = appCtx.getBean(AMQUtils.class);
-        if (userDetailService.getEmailId(email) == null) {
+        if (userDetailService.getUserDetails(email) == null) {
             try {
                 Map<String, String> userInfoMapper = new HashMap<>();
                 String accessToken = (String)authentication.getPrincipal();
@@ -77,7 +77,7 @@ public class CustomKeycloakAuthenticationProvider implements AuthenticationProvi
                 LOGGER.error("Error in saving the roles", e);
             }
         }
-        userDetails = userDetailService.getEmailId(email);
+        userDetails = userDetailService.getUserDetails(email);
         Collection<? extends GrantedAuthority> grantedAuthorities = addUserSpecificAuthorities(
                 token != null ? token.getAuthorities() : authentication.getAuthorities(), userDetails);
         JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(jwt, grantedAuthorities);

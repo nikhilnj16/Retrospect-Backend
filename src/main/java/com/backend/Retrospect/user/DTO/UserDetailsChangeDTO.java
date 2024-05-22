@@ -15,7 +15,7 @@ public class UserDetailsChangeDTO {
         this.userEmail = userEmail;
     }
 
-    public UserDetailsChangeDTO() {
+    public UserDetailsChangeDTO(){
 
     }
 

@@ -25,7 +25,7 @@ public class SocketIOConfig {
 
    @Value("${socket-server.port}")
     private Integer port;
-    private SocketIOServer server;
+//  private SocketIOServer server;
 
     @Bean
     public SocketIOServer socketIOServer() {
