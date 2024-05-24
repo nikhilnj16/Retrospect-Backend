@@ -23,6 +23,12 @@ public class MessageController {
         return ResponseEntity.ok(messageService.getMessages(room));
     }
 
+    @PutMapping("/message/like/{messageId}")
+    public ResponseEntity<Integer> likeMessage(@PathVariable Long messageId, @RequestBody Integer like) {
+        Integer likeCountResponse= messageService.likeMessage(messageId,like);
+        return ResponseEntity.ok(likeCountResponse);
+    }
+
 //    @GetMapping("/analysisMessage/{room}")
 //    public ResponseEntity<HashMap<String ,Integer>> analysisMessages(@PathVariable String room){
 //        return ResponseEntity.ok(messageService.analysisMessages(room));

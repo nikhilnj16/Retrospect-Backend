@@ -34,6 +34,23 @@ public class MessageService {
 
     }
 
+    public Integer likeMessage(Long messageId, Integer like) {
+        Message message= messageRepository.findById(messageId).get();
+        Integer count = message.getLikes();
+        if (count == null) {
+            count = 0;
+        }
+        if(like%2!=0){
+            count++;
+            message.setLikes(count);
+        }
+        else {
+            count--;
+            message.setLikes(count);
+        }
+        messageRepository.save(message);
+        return message.getLikes();
+    }
 //    public HashMap<String, Integer> analysisMessages(String room) {
 //        HashMap<String, Integer> analysis = new HashMap<>();
 //        List<Message> messageList = messageRepository.findAllByRoom(room);
