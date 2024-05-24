@@ -24,8 +24,8 @@ public class MessageController {
     }
 
     @PutMapping("/message/like/{messageId}")
-    public ResponseEntity<Integer> likeMessage(@PathVariable Long messageId, @RequestBody Integer like) {
-        Integer likeCountResponse= messageService.likeMessage(messageId,like);
+    public ResponseEntity<Integer> likeMessage(@PathVariable Long messageId, @RequestBody String user) {
+        Integer likeCountResponse= messageService.likeMessage(messageId,user);
         return ResponseEntity.ok(likeCountResponse);
     }
 
