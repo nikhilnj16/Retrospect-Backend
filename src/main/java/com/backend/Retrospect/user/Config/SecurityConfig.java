@@ -86,7 +86,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/public/*", "/topic/" ,"/user/*" ,"/room/*","/RoomToUserController/*","/message/*" ,"http://localhost:8080/*", "192.168.29.241:8085"  ,"http://192.168.29.241:8085/*").permitAll() // Allow unauthenticated access to these endpoints
+                        .requestMatchers("/public/*", "/topic/" ,"/user/*" ,"/room/*","/RoomToUserController/*","/message/*" ,"http://localhost:8080/*", "192.168.0.42:8085"  ,"http://192.168.0.42:8085/*").permitAll() // Allow unauthenticated access to these endpoints
                         .anyRequest().permitAll()) // Secure all other endpoints
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -96,7 +96,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/actuator/*", "/v3/api-docs/", "/swagger/*",
-                "/swagger/**","/swagger-ui.html" , "http://192.168.29.241:8080/topic/getAllTopic" ,"http://localhost:8080/topic/getAllTopic" );
+                "/swagger/**","/swagger-ui.html" , "http://192.168.0.42:8080/topic/getAllTopic" ,"http://localhost:8080/topic/getAllTopic" );
 
     }
 

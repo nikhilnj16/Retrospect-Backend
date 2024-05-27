@@ -20,6 +20,7 @@ public class Message extends BaseModel {
     private String room;
     private String username;
     private Integer likes;
+    private String likedBy;
     @ManyToOne
     private RoomToUserEntity roomToUser;
 }
