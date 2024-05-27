@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-@RestController("/room")
+@RestController()
 @CrossOrigin("*")
 
 public class RoomController {

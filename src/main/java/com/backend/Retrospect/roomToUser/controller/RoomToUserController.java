@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@RestController("/RoomToUserController")
+@RestController()
 @CrossOrigin("*")
 
 public class RoomToUserController {
