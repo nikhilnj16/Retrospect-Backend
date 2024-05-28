@@ -1,10 +1,6 @@
 package com.backend.Retrospect.sockets.config;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.corundumstudio.socketio.listener.ConnectListener;
-import com.corundumstudio.socketio.listener.DisconnectListener;
-import jakarta.annotation.PreDestroy;
 import lombok.extern.log4j.Log4j2;
 
 import org.springframework.beans.factory.annotation.Value;

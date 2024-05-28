@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/message")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class MessageController {
@@ -23,6 +22,13 @@ public class MessageController {
     public ResponseEntity<List<Message>> getMessages(@PathVariable String room) {
         return ResponseEntity.ok(messageService.getMessages(room));
     }
+
+    @PutMapping("/message/like/{messageId}")
+    public ResponseEntity<Integer> likeMessage(@PathVariable Long messageId, @RequestBody String user) {
+        Integer likeCountResponse= messageService.likeMessage(messageId,user);
+        return ResponseEntity.ok(likeCountResponse);
+    }
+
 
 //    @GetMapping("/analysisMessage/{room}")
 //    public ResponseEntity<HashMap<String ,Integer>> analysisMessages(@PathVariable String room){

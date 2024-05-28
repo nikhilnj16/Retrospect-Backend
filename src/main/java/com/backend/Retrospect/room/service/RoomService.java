@@ -11,14 +11,11 @@ import com.backend.Retrospect.topic.entity.TopicEntity;
 import com.backend.Retrospect.topic.repository.ITopicRepository;
 import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
-import com.backend.Retrospect.user.utility.EmailSender;
 import com.backend.Retrospect.user.utility.UserToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,8 +85,6 @@ public class RoomService implements IRoomService {
             roomEntity.setActive(createRoomDTO.isActive());
             roomEntity.setRestrictedRoom(createRoomDTO.isRestrictedRoom());
             roomEntity.setRestrictedRoomPassKey(createRoomDTO.getRestrictedRoomPassKey());
-            // Set room active status (you can uncomment this line if you have a way to determine the active status)
-            // roomEntity.setActive(createRoomDTO.isActive());
 
             // Set the user entity to the room entity
             roomEntity.setUser(userEntity);

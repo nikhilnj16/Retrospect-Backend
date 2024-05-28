@@ -5,7 +5,7 @@ import com.backend.Retrospect.roomToUser.dto.UsersInRoom;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserEntity;
 import com.backend.Retrospect.roomToUser.entity.RoomToUserId;
 import com.backend.Retrospect.roomToUser.service.RoomToUserService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import com.backend.Retrospect.topic.entity.TopicEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@RestController("/RoomToUserController")
+@RestController()
 @CrossOrigin("*")
 public class RoomToUserController {
     @Autowired

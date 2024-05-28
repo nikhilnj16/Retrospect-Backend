@@ -32,7 +32,7 @@ public class UserEntity {
     @Email(message = "Enter email in correct format")
     private String userEmail;
 
-    //@NotNull(message = "userPassword should not be null")
+
     private String userPassword;
 
 
@@ -40,5 +40,4 @@ public class UserEntity {
     @JsonIgnore
     private List<RoomEntity> createdRooms = new ArrayList<>();
 }
-
 

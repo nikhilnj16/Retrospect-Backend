@@ -4,9 +4,12 @@ import com.backend.Retrospect.sockets.entiry.Message;
 import com.backend.Retrospect.sockets.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +35,32 @@ public class MessageService {
         message.put("status", "success");
         return message;
 
+    }
+
+    public Integer likeMessage(Long messageId, String user) {
+        Message message= messageRepository.findById(messageId).get();
+        Integer count = message.getLikes();
+        // Initialize likedBy if it is null
+        String likedByStr = message.getLikedBy();
+        List<String> likedBy = new ArrayList<>();
+        if (likedByStr != null && !likedByStr.isEmpty()) {
+            likedBy = new ArrayList<>(Arrays.asList(likedByStr.split(",")));
+        }
+        if (count == null) {
+            count = 0;
+        }
+        if (likedBy.contains(user)) {
+            likedBy.remove(user);
+            count--;
+        } else {
+            likedBy.add(user);
+            count++;
+        }
+        message.setLikes(count);
+        message.setLikedBy(StringUtils.join(likedBy, ","));
+        // Save the message and return the new like count
+        messageRepository.save(message);
+        return message.getLikes();
     }
 
 //    public HashMap<String, Integer> analysisMessages(String room) {

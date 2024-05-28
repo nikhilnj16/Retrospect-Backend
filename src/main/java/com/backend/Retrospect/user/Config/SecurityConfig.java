@@ -87,7 +87,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/public/*", "/topic/" ,"/user/*").permitAll() // Allow unauthenticated access to these endpoints
+                        .requestMatchers("/public/*", "/topic/" ,"/user/*" ,"/room/*","/RoomToUserController/*","/message/*" ,"http://localhost:8080/*", "192.168.0.6:8085"  ,"http://192.168.0.6:8085/*").permitAll() // Allow unauthenticated access to these endpoints
                         .anyRequest().permitAll()) // Secure all other endpoints
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -98,6 +98,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/actuator/*", "/v3/api-docs/", "/swagger/*",
                 "/swagger/**","/swagger-ui.html" , "http://192.168.0.6:8080/topic/getAllTopic" ,"http://localhost:8080/topic/getAllTopic" );
+
     }
 
     public interface Jwt2AuthoritiesConverter extends Converter<Jwt, Collection<? extends GrantedAuthority>> {

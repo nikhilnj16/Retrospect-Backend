@@ -1,12 +1,9 @@
 package com.backend.Retrospect.sockets;
 
 import com.backend.Retrospect.room.repository.IRoomRepository;
-import com.backend.Retrospect.roomToUser.dto.UserRoomJoinDTO;
 import com.backend.Retrospect.roomToUser.repository.IRoomToUserRepository;
 import com.backend.Retrospect.roomToUser.service.RoomToUserService;
-import com.backend.Retrospect.sockets.constants.Constants;
 import com.backend.Retrospect.sockets.entiry.Message;
-import com.backend.Retrospect.user.entity.UserEntity;
 import com.backend.Retrospect.user.repository.IUserRepository;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
@@ -62,10 +59,13 @@ public class SocketModule {
             var params = client.getHandshakeData().getUrlParams();
             String room = String.join("", params.get("room"));
             String username = String.join("", params.get("username"));
-            String contentype = "connected";
+//            String contentype = "connected";
             client.joinRoom(room);
-//            socketService.saveInfoMessage(client,String.format(Constants.WELCOME_MESSAGE,username),room,username,contentype);
-            log.info("Socket ID[{}] - room[{}] - username [{}] - content[{}] connected to chat", client.getSessionId().toString(), room, username, contentype);
+
+            // Emit a message to all clients in the room about the new user
+            server.getRoomOperations(room).sendEvent("user_join" ,username);
+
+            log.info("Socket ID[{}] - room[{}] - username[{}] connected to chat", client.getSessionId().toString(), room, username);
         };
 
     }
@@ -75,9 +75,10 @@ public class SocketModule {
             var params = client.getHandshakeData().getUrlParams();
             String room = String.join("", params.get("room"));
             String username = String.join("", params.get("username"));
-            String contentType = "Disconnected";
-//            socketService.saveInfoMessage(client, String.format(Constants.DISCONNECT_MESSAGE, username), room ,username,contentType);
-            log.info("Socket ID[{}] - room[{}] - username [{}]  disconnected to chat module through", client.getSessionId().toString(), room, username);
+
+            server.getRoomOperations(room).sendEvent("user_exit" ,username);
+
+            log.info("Socket ID[{}] - room[{}] - username [{}] disconnected from chat", client.getSessionId().toString(), room, username);
         };
     }
     //    public void saveInfoMessage(SocketIOClient senderClient, String message, String room ,String username ,String contentType ) {
